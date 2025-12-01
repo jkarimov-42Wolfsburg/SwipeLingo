@@ -101,29 +101,29 @@ npm run start    # Start production server
 
 ## Deployment Configuration
 
-### Vercel Setup
+### Vercel + Supabase Setup
 The app is configured for Vercel deployment via `vercel.json`:
 - **Node Version**: 20.x
 - **Framework**: Next.js 14 (auto-detected)
 - **Build Command**: `npm run build`
 - **Start Command**: `npm run start`
+- **Supabase Project**: kmvxgkbejniggepqvftw
+- **Supabase URL**: https://kmvxgkbejniggepqvftw.supabase.co
 
-### Database Requirements for Vercel
-You need an external PostgreSQL database (Replit's Neon-backed database won't work on Vercel). Options:
-1. **Neon** (Recommended - Free tier available): https://neon.tech
-2. **Railway**: https://railway.app
-3. **Supabase**: https://supabase.com
-4. **AWS RDS**: https://aws.amazon.com/rds/postgresql/
+### Quick Vercel Deployment Steps
+1. Get Supabase PostgreSQL connection string (Connection Pooler):
+   - Go to Supabase Dashboard → Settings → Database
+   - Copy Connection Pooler string (port 6543)
+2. Push code to GitHub
+3. Go to Vercel → Import your GitHub repo
+4. Add these environment variables:
+   - `DATABASE_URL` - Your Supabase connection pooler string
+   - `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE` - From Supabase
+   - `SESSION_SECRET` - Run: `openssl rand -base64 32`
+5. Deploy!
+6. (Optional) Seed database: `npm run seed` with your DATABASE_URL
 
-### Environment Variables Needed
-When deploying to Vercel, set these in your Vercel project settings:
-- `DATABASE_URL` - Full PostgreSQL connection string
-- `PGHOST` - Database host
-- `PGPORT` - Database port (usually 5432)
-- `PGUSER` - Database user
-- `PGPASSWORD` - Database password
-- `PGDATABASE` - Database name
-- `SESSION_SECRET` - Random secret for sessions
+See `VERCEL_SETUP_GUIDE.md` for complete detailed instructions.
 
 ## User Preferences
 - Clean, minimal UI design
