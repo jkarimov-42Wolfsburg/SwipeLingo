@@ -4,6 +4,7 @@ const nextConfig = {
   images: {
     domains: ['t.me', 'telegram.org'],
   },
+  allowedDevOrigins: ['*'],
   async headers() {
     return [
       {
