@@ -1,7 +1,9 @@
-# Telegram Mini App - Teacher Matching Platform
+# SwipeLingo - Telegram Mini App for Language Learning
+
+**Motto:** SWIPE-MATCH-SPEAK
 
 ## Overview
-A Next.js 14 Telegram Mini App for connecting students with teachers. Features swipe-based matching, profile browsing, real-time messaging, and a complete database backend.
+A Next.js 14 Telegram Mini App for connecting language learners with teachers. Features swipe-based matching, profile browsing, real-time messaging, and a complete database backend. Users can discover teachers through an engaging swipe interface, match with compatible educators, and chat in real-time to practice languages.
 
 ## Current State
 - **Framework**: Next.js 14 with App Router

@@ -94,7 +94,12 @@ export default function HomePage() {
   return (
     <div className="page-container">
       <div className="max-w-lg mx-auto">
-        <div className="text-center py-8">
+        <div className="text-center py-6">
+          <img src="/logo.png" alt="SwipeLingo" className="w-32 h-32 mx-auto mb-4" />
+          <h2 className="text-sm tracking-widest text-accent font-semibold mb-6">SWIPE-MATCH-SPEAK</h2>
+        </div>
+
+        <div className="text-center py-6">
           <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4 overflow-hidden">
             {dbUser?.photo_url ? (
               <img src={dbUser.photo_url} alt={displayName} className="w-full h-full object-cover" />
