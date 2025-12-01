@@ -120,6 +120,16 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
           const tgUser = tg.initDataUnsafe.user;
           setTelegramUser(tgUser);
           await syncUserToDatabase(tgUser);
+        } else if (process.env.NODE_ENV === 'development') {
+          // Development fallback - simulate a test user
+          const devUser: TelegramUser = {
+            id: 123456789,
+            first_name: 'Test',
+            last_name: 'User',
+            username: 'testuser',
+          };
+          setTelegramUser(devUser);
+          await syncUserToDatabase(devUser);
         } else {
           setError('No Telegram user data available');
         }
@@ -159,9 +169,7 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
 
         setTimeout(() => {
           clearInterval(interval);
-          if (!isReady) {
-            initTelegram();
-          }
+          initTelegram();
         }, 2000);
       }
     }
