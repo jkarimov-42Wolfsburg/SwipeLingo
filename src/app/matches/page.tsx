@@ -127,7 +127,7 @@ export default function MatchesPage() {
                       </h3>
                       {match.last_message && (
                         <span className="text-xs text-hint flex-shrink-0 ml-2">
-                          {formatTime(match.last_message.created_at)}
+                          {formatTime(String(match.last_message.created_at))}
                         </span>
                       )}
                     </div>
