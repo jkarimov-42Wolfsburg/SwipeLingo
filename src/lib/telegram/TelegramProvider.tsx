@@ -128,19 +128,21 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
         setIsLoading(false);
       } else {
         setIsInTelegram(false);
-        setIsReady(true);
-        setIsLoading(false);
         
         if (process.env.NODE_ENV === 'development') {
+          // Development fallback - simulate a test user
           const devUser: TelegramUser = {
             id: 123456789,
-            first_name: 'Dev',
+            first_name: 'Test',
             last_name: 'User',
-            username: 'devuser',
+            username: 'testuser',
           };
           setTelegramUser(devUser);
           await syncUserToDatabase(devUser);
         }
+        
+        setIsReady(true);
+        setIsLoading(false);
       }
     };
 

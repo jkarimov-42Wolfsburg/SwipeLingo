@@ -71,7 +71,7 @@ export default function HomePage() {
     );
   }
 
-  if (error) {
+  if (error && !dbUser) {
     return (
       <div className="page-container flex items-center justify-center">
         <div className="text-center max-w-sm">
