@@ -1,32 +1,118 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useTelegram } from '@/lib/telegram/TelegramProvider';
 import Link from 'next/link';
 
-export default function HomePage() {
-  const { user, isReady } = useTelegram();
+interface Stats {
+  matches: number;
+  likes: number;
+  views: number;
+}
 
-  if (!isReady) {
+export default function HomePage() {
+  const { telegramUser, dbUser, isReady, isLoading, isInTelegram, error } = useTelegram();
+  const [stats, setStats] = useState<Stats>({ matches: 0, likes: 0, views: 0 });
+
+  useEffect(() => {
+    if (dbUser?.id) {
+      fetchStats();
+    }
+  }, [dbUser?.id]);
+
+  const fetchStats = async () => {
+    try {
+      const matchesRes = await fetch(`/api/matches?user_id=${dbUser?.id}`);
+      if (matchesRes.ok) {
+        const matches = await matchesRes.json();
+        setStats(prev => ({ ...prev, matches: matches.length }));
+      }
+    } catch (err) {
+      console.error('Error fetching stats:', err);
+    }
+  };
+
+  if (isLoading) {
     return (
       <div className="page-container flex items-center justify-center">
-        <div className="animate-pulse text-hint">Loading...</div>
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-hint">Loading...</p>
+        </div>
       </div>
     );
   }
+
+  if (!isInTelegram && process.env.NODE_ENV !== 'development') {
+    return (
+      <div className="page-container flex items-center justify-center">
+        <div className="text-center max-w-sm">
+          <div className="w-20 h-20 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <h1 className="text-xl font-bold mb-2">Open in Telegram</h1>
+          <p className="text-hint mb-6">
+            This app is designed to work inside Telegram. Please open it through our Telegram bot.
+          </p>
+          <a
+            href="https://t.me"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary inline-block"
+          >
+            Open Telegram
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="page-container flex items-center justify-center">
+        <div className="text-center max-w-sm">
+          <div className="w-20 h-20 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <h1 className="text-xl font-bold mb-2">Something went wrong</h1>
+          <p className="text-hint">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const displayName = dbUser?.name || telegramUser?.first_name || 'User';
 
   return (
     <div className="page-container">
       <div className="max-w-lg mx-auto">
         <div className="text-center py-8">
-          <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
-            <span className="text-3xl font-bold text-primary">
-              {user?.first_name?.charAt(0) || 'U'}
-            </span>
+          <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4 overflow-hidden">
+            {dbUser?.photo_url ? (
+              <img src={dbUser.photo_url} alt={displayName} className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-3xl font-bold text-primary">
+                {displayName.charAt(0).toUpperCase()}
+              </span>
+            )}
           </div>
           <h1 className="text-2xl font-bold mb-2">
-            Welcome{user?.first_name ? `, ${user.first_name}` : ''}!
+            Welcome, {displayName}!
           </h1>
           <p className="text-hint">Find your perfect teacher match</p>
+          {dbUser?.user_role === 'teacher' && (
+            <span className="inline-block mt-2 px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">
+              Teacher
+            </span>
+          )}
         </div>
 
         <div className="grid gap-4 mt-8">
@@ -90,15 +176,15 @@ export default function HomePage() {
           <h3 className="font-semibold text-primary mb-2">Quick Stats</h3>
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
-              <p className="text-2xl font-bold">0</p>
+              <p className="text-2xl font-bold">{stats.matches}</p>
               <p className="text-xs text-hint">Matches</p>
             </div>
             <div>
-              <p className="text-2xl font-bold">0</p>
+              <p className="text-2xl font-bold">{stats.likes}</p>
               <p className="text-xs text-hint">Likes</p>
             </div>
             <div>
-              <p className="text-2xl font-bold">0</p>
+              <p className="text-2xl font-bold">{stats.views}</p>
               <p className="text-xs text-hint">Views</p>
             </div>
           </div>
