@@ -96,6 +96,34 @@ npm run start    # Start production server
 - Added real-time chat with polling
 - Created seed script with 400 users (10 teachers, 390 learners)
 - Added language filtering and teacher search
+- Fixed TelegramProvider loading bug (stale closure & dev fallback)
+- Configured for Vercel deployment with vercel.json
+
+## Deployment Configuration
+
+### Vercel Setup
+The app is configured for Vercel deployment via `vercel.json`:
+- **Node Version**: 20.x
+- **Framework**: Next.js 14 (auto-detected)
+- **Build Command**: `npm run build`
+- **Start Command**: `npm run start`
+
+### Database Requirements for Vercel
+You need an external PostgreSQL database (Replit's Neon-backed database won't work on Vercel). Options:
+1. **Neon** (Recommended - Free tier available): https://neon.tech
+2. **Railway**: https://railway.app
+3. **Supabase**: https://supabase.com
+4. **AWS RDS**: https://aws.amazon.com/rds/postgresql/
+
+### Environment Variables Needed
+When deploying to Vercel, set these in your Vercel project settings:
+- `DATABASE_URL` - Full PostgreSQL connection string
+- `PGHOST` - Database host
+- `PGPORT` - Database port (usually 5432)
+- `PGUSER` - Database user
+- `PGPASSWORD` - Database password
+- `PGDATABASE` - Database name
+- `SESSION_SECRET` - Random secret for sessions
 
 ## User Preferences
 - Clean, minimal UI design

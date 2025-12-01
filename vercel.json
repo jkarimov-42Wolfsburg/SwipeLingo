@@ -1,0 +1,37 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "nodeVersion": "20.x",
+  "env": {
+    "DATABASE_URL": {
+      "description": "PostgreSQL database connection URL"
+    },
+    "PGHOST": {
+      "description": "PostgreSQL host"
+    },
+    "PGPORT": {
+      "description": "PostgreSQL port"
+    },
+    "PGUSER": {
+      "description": "PostgreSQL user"
+    },
+    "PGPASSWORD": {
+      "description": "PostgreSQL password"
+    },
+    "PGDATABASE": {
+      "description": "PostgreSQL database name"
+    },
+    "SESSION_SECRET": {
+      "description": "Session secret for secure sessions"
+    }
+  },
+  "functions": {
+    "api/**/*.ts": {
+      "runtime": "nodejs20.x",
+      "memory": 1024,
+      "maxDuration": 30
+    }
+  }
+}
